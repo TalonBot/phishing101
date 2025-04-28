@@ -4,9 +4,8 @@ export default function handler(req, res) {
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const userAgent = req.headers['user-agent'] || '';
 
-    // Log only real users
     if (!userAgent.includes('Googlebot')) {
-        fs.appendFileSync('log.txt', `Opened by IP: ${ip} at ${new Date().toISOString()}\n`);
+        console.log(`Opened by IP: ${ip} at ${new Date().toISOString()}`);
     }
 
     res.setHeader('Content-Type', 'text/html');
@@ -24,3 +23,4 @@ export default function handler(req, res) {
       </html>
     `);
 }
+
