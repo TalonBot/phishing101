@@ -1,0 +1,3 @@
+[submodule "not-a-mailer"]
+	path = not-a-mailer
+	url = https://github.com/fdergachev/not-a-mailer.git
